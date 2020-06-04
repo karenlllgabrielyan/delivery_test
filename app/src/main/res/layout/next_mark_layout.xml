@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/rounded_background"
+    android:layout_marginLeft="12dp"
+    android:layout_marginRight="12dp"
+    android:layout_marginTop="6dp"
+    android:layout_marginBottom="6dp"
+    android:layout_width="match_parent"
+    android:layout_height="120dp">
+
+
+    <TextView
+        android:id="@+id/unselected_marks_list_item_number_id"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="20dp"
+        tools:text="1"
+        android:gravity="center"
+        android:textColor="@color/unselected_mark_number_color"
+        android:textSize="22sp"
+        android:background="@drawable/grey_circle_mark"
+        android:layout_width="60dp"
+        android:layout_height="60dp"/>
+
+
+    <TextView
+        android:id="@+id/unselected_mark_string_id"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/unselected_marks_list_item_number_id"
+        app:layout_constraintBottom_toTopOf="@+id/unselected_mark_name_id"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        tools:text="81154787"
+        android:textSize="22sp"
+        android:textColor="@color/blackText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/unselected_mark_name_id"
+        app:layout_constraintTop_toBottomOf="@+id/unselected_mark_string_id"
+        app:layout_constraintLeft_toRightOf="@id/unselected_marks_list_item_number_id"
+        app:layout_constraintBottom_toTopOf="@+id/unselected_mark_address_id"
+        android:layout_marginStart="16dp"
+        android:textSize="16sp"
+        tools:text="NANANANA"
+        android:textColor="@color/greyText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/unselected_mark_address_id"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/unselected_marks_list_item_number_id"
+        app:layout_constraintTop_toBottomOf="@+id/unselected_mark_name_id"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="20dp"
+        android:textSize="16sp"
+        android:textColor="@color/greyText"
+        tools:text="Isahakyan 21"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/unselected_mark_time_to_deliver_id"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/unselected_mark_string_id"
+        tools:text="10:23"
+        android:textSize="22sp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/greenTime"
+        android:layout_marginStart="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/unselected_mark_time_interval_id"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/unselected_mark_address_id"
+        android:layout_marginEnd="10dp"
+        android:textColor="@color/greyText"
+        android:textSize="18sp"
+        tools:text="10:00-12:00"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

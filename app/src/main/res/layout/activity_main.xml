@@ -3,21 +3,47 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolBar_id"
+<!--    <androidx.appcompat.widget.Toolbar-->
+<!--        android:id="@+id/toolBar_id"-->
+<!--        android:minHeight="?attr/actionBarSize"-->
+<!--        android:background="@color/black"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content">-->
+
+<!--    </androidx.appcompat.widget.Toolbar>-->
+    
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/layoutTab_id"
+        android:background="@color/black"
+        app:tabSelectedTextColor="@color/white"
+        app:tabTextColor="@color/white"
+        app:tabIndicatorColor="@color/white"
         android:minHeight="?attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/stopsTab_id"
+            android:text="STOPS"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
-    </androidx.appcompat.widget.Toolbar>
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/mapTab_id"
+            android:text="MAP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </com.google.android.material.tabs.TabLayout>
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager_id"
+        android:background="@color/backgroundGrey"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"

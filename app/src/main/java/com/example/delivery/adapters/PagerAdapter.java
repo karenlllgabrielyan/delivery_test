@@ -2,12 +2,11 @@ package com.example.delivery.adapters;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentStatePagerAdapter;
-
+import androidx.fragment.app.FragmentPagerAdapter;
 import com.example.delivery.fragments.MapFragment;
 import com.example.delivery.fragments.StopsFragment;
 
-public class PagerAdapter extends FragmentStatePagerAdapter {
+public class PagerAdapter extends FragmentPagerAdapter {
 
     int tabCount;
 
@@ -20,15 +19,15 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
 
-        switch (position){
+        switch (position) {
             case 0:
                 StopsFragment stops = new StopsFragment();
                 return stops;
             case 1:
                 MapFragment map = new MapFragment();
                 return map;
-                default:
-                    return null;
+            default:
+                return null;
         }
     }
 

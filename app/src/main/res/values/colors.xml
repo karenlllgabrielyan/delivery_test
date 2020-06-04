@@ -6,6 +6,23 @@
     <color name="backgroundGrey">#53676d</color>
     <color name="blueSigns">#4688f1</color>
     <color name="redSigns">#e90052</color>
+    <color name="redAlert">#d50000</color>
+    <color name="redText">#db2626</color>
+    <color name="greySigns">#dedede</color>
+    <color name="greenTime">#32a845</color>
+    <color name="greyText">#9b9b9b</color>
+    <color name="blackText">#282828</color>
+    <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
+    <color name="greyMarkBackground">#e1e4e4</color>
+    <color name="unselected_mark_number_color">#3f3f3f</color>
+
+
+
+
+
+
+
 
 
 
