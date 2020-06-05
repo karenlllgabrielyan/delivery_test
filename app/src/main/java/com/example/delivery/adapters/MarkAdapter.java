@@ -1,23 +1,17 @@
 package com.example.delivery.adapters;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.delivery.R;
 import com.example.delivery.interfaces.AdapterClickListener;
 import com.example.delivery.templates.Mark;
-
 import java.util.ArrayList;
-
 public class MarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     final String TAG = "MarkAdapter";

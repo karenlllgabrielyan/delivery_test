@@ -234,6 +234,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     }
+    //--------------------------------------------------------------------------------------------------------READ MARKER LOCATIONS
+
+    public ArrayList<String> getMarkerLocations() {
+
+        ArrayList<String> markers = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_MARKS, null);
+
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+
+            String location = cursor.getString(cursor.getColumnIndex(COLUMN_DESTINATION));
+
+            markers.add(location);
+
+
+            cursor.moveToNext();
+
+        }
+        cursor.close();
+        db.close();
+
+        return markers;
+
+
+    }
 
 
 }

@@ -16,6 +16,10 @@
     <color name="white">#ffffff</color>
     <color name="greyMarkBackground">#e1e4e4</color>
     <color name="unselected_mark_number_color">#3f3f3f</color>
+    <color name="redMarker">#E90052</color>
+    <color name="blueMarker">#4688F1</color>
+    <color name="blackMarker">#000000</color>
+
 
 
 

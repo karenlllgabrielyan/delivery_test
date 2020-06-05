@@ -22,6 +22,7 @@ import com.example.delivery.adapters.MarkAdapter;
 import com.example.delivery.databases.DatabaseHelper;
 import com.example.delivery.interfaces.AdapterClickListener;
 import com.example.delivery.interfaces.ActiveMarksCount;
+import com.example.delivery.interfaces.OnMarkerChangedListener;
 import com.example.delivery.templates.Mark;
 import java.util.ArrayList;
 
@@ -37,6 +38,7 @@ public class StopsFragment extends Fragment {
     private ActiveMarksCount activeMarksCount;
 
     private final String TAG = "StopFragment";
+    private OnMarkerChangedListener markerChangedListener;
 
     @Override
     public void onAttach(Context context) {
@@ -105,6 +107,8 @@ public class StopsFragment extends Fragment {
             }
         };
 
+
+
         layoutManager.scrollToPositionWithOffset(dbHelper.getCurrentMark(),0);
 //###################################################################################################################### INTERFACE INIT
         adapter.onOpenGoogleMapListener(new AdapterClickListener() {
@@ -116,6 +120,7 @@ public class StopsFragment extends Fragment {
 
             @Override
             public void onFinishClicked(int position) {
+
                 showFinishAlertDialog(position);
                 Log.d(TAG,"----------------------------------------------------------------------------------------------   " + dbHelper.getCurrentMark());
             }
@@ -175,9 +180,30 @@ public class StopsFragment extends Fragment {
                 currentMarkPosition = position;
                 marks.get(position).setType(0);
                 if (position == marks.size()-1){
-                    dbHelper.updateType(position + 1, 0);
-                    activeMarksCount.onItemsCount(0);
-                    adapter.notifyItemChanged(position+1);
+                    dbHelper.dropTypes();
+                    marks = dbHelper.readMarksData();
+                    currentMarkPosition = 0;
+                    dbHelper.currentMarkIndex(1,0);
+//                    dbHelper.updateType(position + 1, 0);
+                    activeMarksCount.onItemsCount(20);
+//                    adapter.notifyItemChanged(position+1);
+                    adapter = new MarkAdapter(marks, getContext());
+                    recyclerView.setAdapter(adapter);
+                    layoutManager.scrollToPositionWithOffset(dbHelper.getCurrentMark(),0);
+                    adapter.onOpenGoogleMapListener(new AdapterClickListener() {
+                        @Override
+                        public void onOpenMapClicked(int position) {
+                            currentMarkPosition = position;
+                            showNavigationAlertDialog();
+                        }
+
+                        @Override
+                        public void onFinishClicked(int position) {
+
+                            showFinishAlertDialog(position);
+                            Log.d(TAG,"----------------------------------------------------------------------------------------------   " + dbHelper.getCurrentMark());
+                        }
+                    });
 
                 }else{
                     marks.get(position + 1).setType(1);
@@ -192,6 +218,7 @@ public class StopsFragment extends Fragment {
                 layoutManager.startSmoothScroll(smoothScroller);
                 adapter.notifyItemChanged(position);
 
+
             }
         });
         builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
@@ -202,6 +229,10 @@ public class StopsFragment extends Fragment {
         });
         builder.create().show();
 
+    }
+
+    public void onMarekerChange(OnMarkerChangedListener markerChangedListener){
+        this.markerChangedListener = markerChangedListener;
     }
 
 
