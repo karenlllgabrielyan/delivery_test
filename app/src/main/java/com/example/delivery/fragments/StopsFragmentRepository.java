@@ -34,11 +34,11 @@ public class StopsFragmentRepository {
     }
     //------------------------------------------------------- DELETE
     public void delete(Mark mark){
-
+        new DeleteMarkAsyncTask(markDao).execute(mark);
     }
     //------------------------------------------------------- DELETE ALL
     public void deleteAllMarks(){
-
+        new DeleteAllMarksAsyncTask(markDao).execute();
     }
 
     public LiveData<ArrayList<Mark>> getMarks() {
