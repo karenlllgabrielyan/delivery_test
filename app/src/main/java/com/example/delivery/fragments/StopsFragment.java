@@ -13,10 +13,13 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.delivery.MainActivity;
+import com.example.delivery.activities.MainActivity;
 import com.example.delivery.R;
 import com.example.delivery.adapters.MarkAdapter;
 import com.example.delivery.databases.DatabaseHelper;
@@ -36,16 +39,29 @@ public class StopsFragment extends Fragment {
     private int currentMarkPosition;
     private RecyclerView.SmoothScroller smoothScroller;
     private ActiveMarksCount activeMarksCount;
+    private StopsFragmentViewModel viewModel;
 
     private final String TAG = "StopFragment";
     private OnMarkerChangedListener markerChangedListener;
 
     @Override
     public void onAttach(Context context) {
+        viewModel = new ViewModelProvider(this).get(StopsFragmentViewModel.class);
         if (context instanceof MainActivity){
             activeMarksCount = (MainActivity)context;
         }
         super.onAttach(context);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel.getMarksLiveData().observe(this, new Observer<ArrayList<Mark>>() {
+            @Override
+            public void onChanged(ArrayList<Mark> marks) {
+                Log.d(TAG,"---------------------------------------- Mark LiveDataChanged, marks size = " + marks.size());
+            }
+        });
     }
 
     @Nullable
@@ -59,6 +75,8 @@ public class StopsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
+
+        viewModel.loadMarks();
         recyclerView = view.findViewById(R.id.recycle_view_stops_id);
         layoutManager = new LinearLayoutManager(view.getContext(), RecyclerView.VERTICAL, false);
 
@@ -87,7 +105,6 @@ public class StopsFragment extends Fragment {
             dbHelper.addMark(new Mark("Pushkin 56a", "Yerevan", "9673164", "13:56", "12:00 - 14:00", "40.1859556,44.5091863",2));
             dbHelper.addMark(new Mark("Tumanyan 40", "Yerevan", "3129788", "14:14", "14:00 - 16:00", "40.1863006,44.511348",2));
             dbHelper.addMark(new Mark("Teryan 44", "Yerevan", "16549", "14:36", "14:00 - 16:00", "40.1843272,44.5151174",2));
-//            dbHelper.currentMarkIndex(0,0);
         }
 
         marks = new ArrayList<Mark>(dbHelper.readMarksData());
@@ -106,7 +123,6 @@ public class StopsFragment extends Fragment {
                 return LinearSmoothScroller.SNAP_TO_START;
             }
         };
-
 
 
         layoutManager.scrollToPositionWithOffset(dbHelper.getCurrentMark(),0);
@@ -238,3 +254,6 @@ public class StopsFragment extends Fragment {
 
 
 }
+
+
+

@@ -3,7 +3,6 @@ package com.example.delivery.databases;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -186,7 +185,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return false;
 
     }
-//---------------------------------------------------------------------------------- COLUMN ITEM COUNT
+//---------------------------------------------------------------------------------------------------------- COLUMN ITEM COUNT
     public int getColumnItemCount() {
 
         int count = 0;

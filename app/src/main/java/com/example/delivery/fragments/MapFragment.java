@@ -13,6 +13,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -27,6 +30,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.ui.IconGenerator;
 
 import java.util.ArrayList;
 
@@ -43,6 +47,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, OnMarke
     private int currentPosition;
     private String latLng;
     private OnMarkerChangedListener markerChangedListener;
+    private TextView tv;
+    private Bitmap viewBitmap;
+    private TextView tvItem;
 
 
 
@@ -51,6 +58,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, OnMarke
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.map_fragment_layout, container, false);
 
+//        bitmap = loadBitmapFromView(tv);
+//        tv.buildDrawingCache();
+//
+//        tv.setDrawingCacheEnabled(true);
+
         Bundle mapViewBundle = null;
         if (savedInstanceState != null) {
             mapViewBundle = savedInstanceState.getBundle(MAP_VIEW_BUNDLE_KEY);
@@ -58,15 +70,28 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, OnMarke
         mapView = v.findViewById(R.id.map_view);
 //        mapView.onCreate(savedInstanceState);
 
-        mapView.onCreate(mapViewBundle);
+        mapView.onCreate(null);
+        mapView.onResume();
         mapView.getMapAsync(this);
         dbHelper = new DatabaseHelper(getContext());
         marks = new ArrayList<>(dbHelper.readMarksData());
         currentPosition = dbHelper.getCurrentMark();
-
+        tvItem = v.findViewById(R.id.marker_tv_number);
 
         return v;
 
+    }
+
+
+    private Bitmap convertViewToBitmap(View view){
+
+
+        view.setDrawingCacheEnabled(true);
+
+        view.buildDrawingCache();
+
+        Bitmap bm = view.getDrawingCache();
+        return bm;
     }
 
     @Override
@@ -86,7 +111,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, OnMarke
             outState.putBundle(MAP_VIEW_BUNDLE_KEY, mapViewBundle);
         }
 
-        mapView.onSaveInstanceState(mapViewBundle);
+//        mapView.onSaveInstanceState(mapViewBundle);
 
 
     }
@@ -109,45 +134,41 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, OnMarke
             String[] split = latLng.split(",");
             double lat = Double.parseDouble(split[0]);
             double lng = Double.parseDouble(split[1]);
+            IconGenerator icon = new IconGenerator(getContext());
 
-            Bitmap bm;
             int numLength;
 //-----------------------------------------------------------------------------------------------------------------------------IF FINISHED
             if (i < currentPosition) {
-                if (i < 10) numLength = 0;
-                else numLength = 1;
-
-                bm = makeBitmap(getContext(), String.valueOf(i +1), numLength, R.drawable.blue_mark);
+                icon.setBackground(getResources().getDrawable(R.drawable.blue_mark));
+                icon.setTextAppearance(R.style.myStyleText);
 
                 MarkerOptions marker = new MarkerOptions()
                         .position(new LatLng(lat, lng))
                         .title(marks.get(i).getName())
-                        .icon(BitmapDescriptorFactory.fromBitmap(bm));
+                        .icon(BitmapDescriptorFactory.fromBitmap(convertViewToBitmap(tvItem)));
                 gmap.addMarker(marker);
 
             } else {
 //-----------------------------------------------------------------------------------------------------------------------------IF CURRENT
                 if (i == currentPosition) {
-                    if (i < 10) numLength = 0;
-                    else numLength = 1;
+                    icon.setBackground(getResources().getDrawable(R.drawable.red_mark));
+                    icon.setTextAppearance(R.style.myStyleText);
 
-                    bm = makeBitmap(getContext(), String.valueOf(i +1), numLength, R.drawable.red_mark);
                     MarkerOptions marker = new MarkerOptions()
                             .position(new LatLng(lat, lng))
                             .title(marks.get(i).getName())
-                            .icon(BitmapDescriptorFactory.fromBitmap(bm));
+                            .icon(BitmapDescriptorFactory.fromBitmap(icon.makeIcon(String.valueOf(i))));
                     gmap.addMarker(marker);
                 } else {
 //-----------------------------------------------------------------------------------------------------------------------------IF NEXT
-                    if (i < 10) numLength = 0;
-                    else numLength = 1;
+                    icon.setBackground(getResources().getDrawable(R.drawable.ic_black_square));
+                    icon.setTextAppearance(R.style.myStyleText);
 
-                    bm = makeBitmap(getContext(), String.valueOf(i +1), numLength, R.drawable.black_mark);
-
+                    tvItem.setText(String.valueOf(i));
                     MarkerOptions marker = new MarkerOptions()
                             .position(new LatLng(lat, lng))
                             .title(marks.get(i).getName())
-                            .icon(BitmapDescriptorFactory.fromBitmap(bm));
+                            .icon(BitmapDescriptorFactory.fromBitmap(convertViewToBitmap(tvItem)));
                     gmap.addMarker(marker);
                 }
             }
@@ -155,50 +176,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, OnMarke
 
 
     }
-//----------------------------------------------------------------------------------------------------BITMAP WITH TEXT
-    public Bitmap makeBitmap(Context context, String text, int numLength, int icon)
-    {
-        Resources resources = context.getResources();
-        float scale = resources.getDisplayMetrics().density;
-        Bitmap bitmap = BitmapFactory.decodeResource(resources, icon);
-        bitmap = bitmap.copy(ARGB_8888, true);
 
-        Canvas canvas = new Canvas(bitmap);
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(Color.WHITE); // Text color
-        paint.setTextSize(32 * scale); // Text size
-        paint.setShadowLayer(1f, 0f, 1f, Color.WHITE); // Text shadow
-        Rect bounds = new Rect();
-        paint.getTextBounds(text, 0, text.length(), bounds);
-
-        if (numLength == 0){
-            int x = bitmap.getWidth() - bounds.width() - 35; // 10 for padding from right
-            int y = bounds.height() + 15;
-            canvas.drawText(text, x, y, paint);
-        }
-        else {
-            int x = bitmap.getWidth() - bounds.width() - 15; // 10 for padding from right
-            int y = bounds.height() + 15;
-            canvas.drawText(text, x, y, paint);
-        }
-
-
-        return  bitmap;
-    }
 
 
     @Override
     public void onResume() {
         Log.d(TAG, "------------------------------------------------------------- ON Resume");
         super.onResume();
-        mapView.onResume();
+//        mapView.onResume();
     }
 
     @Override
     public void onStart() {
         Log.d(TAG, "------------------------------------------------------------- ON Start");
         super.onStart();
-        mapView.onStart();
+//        mapView.onStart();
     }
 
     @Override
@@ -207,27 +199,27 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, OnMarke
         currentPosition = dbHelper.getCurrentMark();
         marks = dbHelper.readMarksData();
         super.onStop();
-        mapView.onStop();
+//        mapView.onStop();
     }
 
     @Override
     public void onPause() {
         Log.d(TAG, "------------------------------------------------------------- ON Pause");
-        mapView.onPause();
+//        mapView.onPause();
         super.onPause();
     }
 
     @Override
     public void onDestroy() {
         Log.d(TAG, "------------------------------------------------------------- ON Destroy");
-        mapView.onDestroy();
+//        mapView.onDestroy();
         super.onDestroy();
     }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        mapView.onLowMemory();
+//        mapView.onLowMemory();
     }
 
     @Override

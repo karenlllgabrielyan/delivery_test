@@ -1,7 +1,13 @@
 package com.example.delivery.templates;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "mark_table")
 public class Mark {
 
+    @PrimaryKey(autoGenerate = true)
+    private int id;
     private String name;
     private String address;
     private String numbers;

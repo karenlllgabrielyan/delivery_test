@@ -1,4 +1,4 @@
-package com.example.delivery;
+package com.example.delivery.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.PagerAdapter;
@@ -7,6 +7,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.os.Bundle;
 import android.widget.Toolbar;
 
+import com.example.delivery.R;
 import com.example.delivery.interfaces.ActiveMarksCount;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
@@ -20,6 +21,7 @@ public class MainActivity extends AppCompatActivity implements ActiveMarksCount 
     private TabItem stopsTabItem;
     private TabItem mapTabItem;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +34,8 @@ public class MainActivity extends AppCompatActivity implements ActiveMarksCount 
 
         pagerAdapter = new com.example.delivery.adapters.PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         pager.setAdapter(pagerAdapter);
+
+
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
